@@ -9,7 +9,7 @@ Page de présentation professionnelle, bilingue français / anglais, publiée av
 | `index.html` | La page complète : contenu, mise en forme (CSS) et sélecteur de langue (JavaScript). Aucune dépendance. |
 | `adrien-nb.jpg` | Portrait affiché dans l'en-tête. |
 | `.nojekyll` | Demande à GitHub Pages de publier les fichiers tels quels, sans transformation. |
-| `CNAME` | (à ajouter une fois le domaine acheté) Nom de domaine personnalisé, par exemple `adrienboeuf.fr`. |
+| `CNAME` | Nom de domaine personnalisé : `adrienboeuf.fr` (lu par GitHub Pages). |
 
 ## Modifier le site
 
@@ -23,5 +23,5 @@ La notice en tête de `index.html` détaille l'organisation du code (sections, l
 ## Publication
 
 - Hébergement : GitHub Pages (gratuit), branche `main`, dossier racine.
-- Nom de domaine : à relier via le fichier `CNAME` et la configuration DNS chez le registraire (OVHcloud).
+- Nom de domaine : `adrienboeuf.fr`, acheté chez Hostinger. DNS : quatre enregistrements A et quatre AAAA vers GitHub Pages pour la racine, `www` en CNAME vers `aboeuf16.github.io`.
 - HTTPS : fourni gratuitement par GitHub Pages ; cocher « Enforce HTTPS » dans *Settings › Pages*.
