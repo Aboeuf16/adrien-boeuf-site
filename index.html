@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  Site personnel d'Adrien Boeuf — page unique, bilingue FR / EN
+  ----------------------------------------------------------------------------
+  Fichiers :
+    index.html      cette page (HTML + CSS + JavaScript, sans dépendance)
+    adrien-nb.jpg   portrait (noir et blanc appliqué aussi en CSS)
+
+  Principes techniques :
+    - Aucune bibliothèque ni framework : la page reste légère et lisible.
+    - Seule ressource externe : les polices Google Fonts (Cormorant Garamond
+      pour les titres, Inter pour le texte). Sans connexion, le navigateur
+      bascule sur Georgia / la police système, sans casser la mise en page.
+    - Bilinguisme : chaque texte existe en deux versions dans des <span>
+      marqués data-l="fr" et data-l="en". Le CSS n'affiche que la langue
+      indiquée par l'attribut lang de la balise <html> ; le script en bas de
+      page change cet attribut quand on clique sur FR / EN.
+    - Responsive : une seule règle @media (max-width:860px) repasse toutes les
+      grilles sur une colonne pour les téléphones.
+
+  Pour modifier un texte : rechercher la phrase, modifier les DEUX versions
+  (data-l="fr" et data-l="en").
+  Pour ajouter une décision : copier un bloc <article class="case"> complet.
+  ============================================================================
+-->
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adrien Boeuf · Marketing & Expérience client</title>
+<meta name="description" content="Adrien Boeuf. Marketing et expérience client : faire de ce qui est possible ce que les clients choisissent.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ---------------------------------------------------------------
+   Variables de charte : couleurs et polices. Modifier ici pour
+   changer l'apparence de tout le site.
+   --------------------------------------------------------------- */
+:root{
+  --ink:#16202E; --soft:#4A5563; --mute:#8A919B; --line:#E3DED4;
+  --paper:#F8F6F1; --card:#FFFFFF; --accent:#2E5E73;
+  --serif:"Cormorant Garamond",Georgia,"Times New Roman",serif;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--paper);color:var(--ink);font:300 17px/1.7 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 40px}
+
+/* langue : un seul bloc visible à la fois */
+[data-l="en"]{display:none !important}
+html[lang="en"] [data-l="fr"]{display:none !important}
+html[lang="en"] [data-l="en"]{display:revert !important}
+
+/* navigation */
+nav{position:sticky;top:0;z-index:10;background:rgba(248,246,241,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+.mark{font:500 21px var(--serif);letter-spacing:.02em;text-decoration:none}
+.links{display:flex;gap:28px;align-items:center;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase}
+.links a{text-decoration:none;color:var(--soft)}
+.links a:hover{color:var(--ink)}
+.lang{border:1px solid var(--line);border-radius:20px;padding:3px;display:flex;gap:2px}
+.lang button{border:0;background:none;font:500 12px var(--sans);letter-spacing:.08em;padding:5px 11px;border-radius:16px;color:var(--mute);cursor:pointer}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+
+/* accroche */
+.hero{padding:120px 0 100px;border-bottom:1px solid var(--line)}
+.hero .grid{display:grid;grid-template-columns:1fr 200px;gap:72px;align-items:center}
+.kicker{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);margin-bottom:28px}
+h1{font:400 clamp(40px,5.4vw,70px)/1.08 var(--serif);letter-spacing:-.01em;max-width:21ch}
+h1 em{font-style:italic;color:var(--accent)}
+.lede{margin-top:36px;max-width:60ch;font-size:19px;color:var(--soft)}
+.portrait{width:200px;height:200px;border-radius:50%;object-fit:cover;filter:grayscale(1) contrast(1.05);box-shadow:0 0 0 1px var(--line)}
+
+/* sections */
+section{padding:100px 0;border-bottom:1px solid var(--line)}
+.label{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);margin-bottom:14px}
+h2{font:400 clamp(32px,3.8vw,46px)/1.15 var(--serif);margin-bottom:56px;max-width:26ch}
+.intro{max-width:62ch;color:var(--soft);margin:-28px 0 56px}
+
+/* trois verbes */
+.verbs{display:grid;grid-template-columns:repeat(3,1fr);gap:56px}
+.verb h3{font:500 32px var(--serif);margin-bottom:14px}
+.verb p{color:var(--soft);font-size:16px}
+.proof{margin-top:22px;padding-top:16px;border-top:1px solid var(--line);font-size:14.5px;color:var(--ink)}
+.proof b{font-weight:600;color:var(--accent)}
+
+/* décisions */
+.case{display:grid;grid-template-columns:200px 1fr;gap:48px;padding:48px 0;border-top:1px solid var(--line)}
+.case:first-of-type{border-top:0;padding-top:8px}
+.when{font-size:15px;color:var(--ink);letter-spacing:.03em}
+.org{display:block;margin-top:6px;font-size:13.5px;color:var(--mute);line-height:1.5}
+.case h3{font:500 32px/1.2 var(--serif);margin-bottom:24px}
+.row{display:grid;grid-template-columns:120px 1fr;gap:24px;padding:12px 0;border-top:1px dashed var(--line)}
+.row:first-of-type{border-top:0}
+.lb{font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);padding-top:4px}
+.row p{font-size:16px;color:var(--soft)}
+
+/* principes */
+.principles{display:grid;grid-template-columns:repeat(2,1fr);gap:0 64px}
+.pr{padding:26px 0;border-top:1px solid var(--line)}
+.pr h3{font:500 25px/1.3 var(--serif);margin-bottom:6px}
+.pr p{font-size:15.5px;color:var(--soft)}
+.needs{margin-top:56px;padding:36px 40px;background:var(--card);border:1px solid var(--line)}
+.needs p{font:italic 400 23px/1.5 var(--serif);color:var(--ink)}
+
+/* citations */
+.quotes{display:grid;grid-template-columns:repeat(3,1fr);gap:44px}
+blockquote{font:italic 400 25px/1.4 var(--serif);color:var(--ink);padding-top:24px;border-top:2px solid var(--accent)}
+.src{margin-top:40px;font-size:13px;color:var(--mute)}
+.trait{margin-top:48px;display:grid;grid-template-columns:200px 1fr;gap:48px;padding-top:32px;border-top:1px solid var(--line)}
+.trait p{color:var(--soft);max-width:64ch}
+
+/* projet */
+.project{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
+.project h3{font:500 32px var(--serif);margin-bottom:12px}
+.tag{display:inline-block;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:3px 10px;border-radius:20px;margin-bottom:18px}
+.project p{color:var(--soft)}
+
+/* parcours */
+.path{list-style:none}
+.path li{display:grid;grid-template-columns:150px 1fr 1fr;gap:32px;padding:20px 0;border-top:1px solid var(--line);font-size:16px;align-items:baseline}
+.path .y{color:var(--mute)}
+.path .r{font-weight:500}
+.path .r small{display:block;font-weight:300;font-size:13.5px;color:var(--mute);margin-top:2px}
+.path .s{color:var(--soft);font-size:15px}
+.edu{margin-top:40px;font-size:15px;color:var(--soft)}
+
+/* contact */
+.contact{padding:110px 0 120px;border-bottom:0}
+.contact h2{margin-bottom:28px}
+.contact a.mail{font:400 clamp(26px,3.4vw,40px) var(--serif);text-decoration:none;border-bottom:1px solid var(--accent)}
+.contact .alt{margin-top:22px;font-size:15px;color:var(--soft)}
+footer{padding:28px 0;font-size:12px;color:var(--mute);letter-spacing:.04em}
+
+@media (max-width:860px){
+  body{font-size:16px}
+  .wrap{padding:0 22px}
+  .links a{display:none}
+  .hero{padding:56px 0 60px}
+  .hero .grid{grid-template-columns:1fr;gap:28px}
+  .portrait{order:-1;width:112px;height:112px}
+  h1{max-width:none}
+  .lede{font-size:17px;margin-top:24px}
+  section{padding:64px 0}
+  h2{margin-bottom:36px}
+  .intro{margin:-16px 0 36px}
+  .verbs,.quotes,.principles,.project{grid-template-columns:1fr;gap:32px}
+  .principles{gap:0}
+  .case{grid-template-columns:1fr;gap:12px;padding:36px 0}
+  .case h3{font-size:27px}
+  .row{grid-template-columns:1fr;gap:2px}
+  .trait{grid-template-columns:1fr;gap:8px}
+  .path li{grid-template-columns:1fr;gap:2px}
+  .needs{padding:26px 24px}
+  .needs p{font-size:20px}
+  blockquote{font-size:23px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== Barre de navigation fixe + sélecteur de langue ===== -->
+<nav>
+  <div class="wrap">
+    <a class="mark" href="#top">Adrien Boeuf</a>
+    <div class="links">
+      <a href="#decisions"><span data-l="fr">Décisions</span><span data-l="en">Decisions</span></a>
+      <a href="#methode"><span data-l="fr">Méthode</span><span data-l="en">Approach</span></a>
+      <a href="#parcours"><span data-l="fr">Parcours</span><span data-l="en">Career</span></a>
+      <a href="#contact">Contact</a>
+      <div class="lang" role="group" aria-label="Langue / Language">
+        <button type="button" data-set="fr" aria-pressed="true">FR</button>
+        <button type="button" data-set="en" aria-pressed="false">EN</button>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== Accroche : signature, introduction, portrait ===== -->
+<header class="hero" id="top">
+  <div class="wrap grid">
+    <div>
+      <p class="kicker"><span data-l="fr">Marketing &amp; expérience client</span><span data-l="en">Marketing &amp; customer experience</span></p>
+      <h1>
+        <span data-l="fr">Faire de ce qui est possible ce que les clients <em>choisissent</em>.</span>
+        <span data-l="en">Turning what is possible into what customers <em>choose</em>.</span>
+      </h1>
+      <p class="lede">
+        <span data-l="fr">Depuis dix-sept ans, je transforme une technologie, une donnée ou une organisation complexe en offres, en parcours et en produits qui trouvent leur marché. Dans un grand groupe industriel, au sein d'un consortium de sept groupes technologiques et dans une start-up de la donnée publique.</span>
+        <span data-l="en">For seventeen years, I have turned technology, data and complex organisations into offers, journeys and products that find their market. In a global industrial group, within a consortium of seven technology groups and in a public-data start-up.</span>
+      </p>
+    </div>
+    <img class="portrait" src="adrien-nb.jpg" alt="Adrien Boeuf">
+  </div>
+</header>
+
+<!-- ===== Trois verbes (Relier, Structurer, Livrer) avec une preuve chacun ===== -->
+<section>
+  <div class="wrap">
+    <p class="label"><span data-l="fr">Ce que je fais</span><span data-l="en">What I do</span></p>
+    <h2><span data-l="fr">Trois verbes, toujours les mêmes.</span><span data-l="en">Three verbs, always the same.</span></h2>
+    <div class="verbs">
+      <div class="verb">
+        <h3><span data-l="fr">Relier</span><span data-l="en">Connect</span></h3>
+        <p><span data-l="fr">Ce que la technique rend possible et ce que vivent les clients, les réseaux de distribution et les utilisateurs.</span><span data-l="en">What technology makes possible and what customers, dealer networks and users actually experience.</span></p>
+        <p class="proof"><span data-l="fr"><b>3 marques</b> · un parcours digital de la commande à la livraison</span><span data-l="en"><b>3 brands</b> · one digital journey from order to delivery</span></p>
+      </div>
+      <div class="verb">
+        <h3><span data-l="fr">Structurer</span><span data-l="en">Structure</span></h3>
+        <p><span data-l="fr">Donner un cadre, des priorités et un rythme de décision à ce qui n'en a pas encore.</span><span data-l="en">Bring a framework, priorities and a decision rhythm to what does not have them yet.</span></p>
+        <p class="proof"><span data-l="fr"><b>5 pays</b> · une stratégie digitale, CRM et e-commerce commune</span><span data-l="en"><b>5 countries</b> · one shared digital, CRM and e-commerce strategy</span></p>
+      </div>
+      <div class="verb">
+        <h3><span data-l="fr">Livrer</span><span data-l="en">Deliver</span></h3>
+        <p><span data-l="fr">Aller jusqu'à l'usage : un projet n'existe que lorsqu'il sert.</span><span data-l="en">Go all the way to use: a project only exists once it serves someone.</span></p>
+        <p class="proof"><span data-l="fr"><b>5 produits data et IA</b> · conçus et pilotés en neuf mois chez HexaDone</span><span data-l="en"><b>5 data and AI products</b> · designed and run in nine months at HexaDone</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Décisions : un <article class="case"> par décision
+     (colonne gauche : dates et organisation ; droite : situation / décision / résultat) ===== -->
+<section id="decisions">
+  <div class="wrap">
+    <p class="label"><span data-l="fr">Six décisions</span><span data-l="en">Six decisions</span></p>
+    <h2><span data-l="fr">Ce qu'il a fallu trancher.</span><span data-l="en">What had to be decided.</span></h2>
+    <p class="intro"><span data-l="fr">Six moments de mon parcours, racontés de la même façon : la situation, ce que j'ai décidé, ce que cela a changé.</span><span data-l="en">Six moments in my career, told the same way: the situation, what I decided, what it changed.</span></p>
+
+    <article class="case">
+      <div><p class="when"><span data-l="fr">2026 – aujourd'hui</span><span data-l="en">2026 – today</span></p><span class="org"><span data-l="fr">Renault, Dacia, Alpine · Direction expérience client</span><span data-l="en">Renault, Dacia, Alpine · Customer Experience</span></span></div>
+      <div>
+        <h3><span data-l="fr">Transformer l'attente en temps utile</span><span data-l="en">Turning waiting time into useful time</span></h3>
+        <div class="row"><span class="lb"><span data-l="fr">Situation</span><span data-l="en">Situation</span></span><p><span data-l="fr">Entre la commande et la livraison, le client attend son véhicule. C'est un moment où la marque peut renforcer la relation, ou la laisser s'éteindre.</span><span data-l="en">Between order and delivery, the customer waits for the vehicle. It is a moment when the brand can strengthen the relationship, or let it fade.</span></p></div>
+        <div class="row"><span class="lb"><span data-l="fr">Décision</span><span data-l="en">Decision</span></span><p><span data-l="fr">Faire de cette attente un parcours à part entière, dans les applications des trois marques, et le prolonger jusqu'à la mise en service.</span><span data-l="en">Make this wait a journey in its own right, in the apps of all three brands, and extend it to vehicle commissioning.</span></p></div>
+        <div class="row"><span class="lb"><span data-l="fr">Résultat</span><span data-l="en">Outcome</span></span><p><span data-l="fr">Trois fonctionnalités cadrées et lancées en développement : suivi de commande, tutoriels de prise en main, prise de rendez-vous de livraison. Une vision cible 2027-2028 pour un parcours unifié, de la commande à la mise en service.</span><span data-l="en">Three features scoped and launched into development: order tracking, onboarding tutorials, delivery appointment booking. A 2027-2028 target vision for a unified journey, from order to commissioning.</span></p></div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div><p class="when">2025</p><span class="org"><span data-l="fr">HexaDone, start-up créée par Orange Business et la Banque des Territoires</span><span data-l="en">HexaDone, a start-up founded by Orange Business and Banque des Territoires</span></span></div>
+      <div>
+        <h3><span data-l="fr">Faire de la donnée publique un outil de décision</span><span data-l="en">Turning public data into a decision tool</span></h3>
+        <div class="row"><span class="lb"><span data-l="fr">Situation</span><span data-l="en">Situation</span></span><p><span data-l="fr">HexaDone aide les collectivités à décider grâce à la donnée. J'y suis détaché neuf mois pour structurer son offre Mobilité.</span><span data-l="en">HexaDone helps local authorities make decisions with data. I was seconded there for nine months to structure its Mobility offer.</span></p></div>
+        <div class="row"><span class="lb"><span data-l="fr">Décision</span><span data-l="en">Decision</span></span><p><span data-l="fr">Prendre en charge toute la chaîne, de l'avant-vente à la livraison, et transformer les développements sur mesure en briques réutilisables.</span><span data-l="en">Take on the whole chain, from pre-sales to delivery, and turn custom developments into reusable building blocks.</span></p></div>
+        <div class="row"><span class="lb"><span data-l="fr">Résultat</span><span data-l="en">Outcome</span></span><p><span data-l="fr">Cinq produits data et IA : tourisme, fréquentation et stationnement pour la Région Sud ; reports modaux pour le Grand Reims ; un observatoire national de l'accidentologie pour les Départements de France ; deux assistants IA métiers.</span><span data-l="en">Five data and AI products: tourism, footfall and parking for the Région Sud; modal shift for Greater Reims; a national road-accident observatory for the Départements de France; two business AI assistants.</span></p></div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div><p class="when">2021 – 2025</p><span class="org"><span data-l="fr">Software République, consortium d'innovation</span><span data-l="en">Software République, innovation consortium</span></span></div>
+      <div>
+        <h3><span data-l="fr">Rendre la valeur visible avant de la vendre</span><span data-l="en">Making value visible before selling it</span></h3>
+        <div class="row"><span class="lb"><span data-l="fr">Situation</span><span data-l="en">Situation</span></span><p><span data-l="fr">Software République réunit sept grands groupes : Renault, Orange, Thales, Dassault Systèmes, STMicroelectronics, Atos/Eviden et JCDecaux. Je rejoins le consortium dès sa création pour construire sa verticale Mobilité. Mais chaque proposition de valeur, en mobilité comme en énergie ou en connectivité, doit d'abord convaincre les dirigeants de sept groupes, et les présentations ne suffisent pas.</span><span data-l="en">Software République brings together seven major groups: Renault, Orange, Thales, Dassault Systèmes, STMicroelectronics, Atos/Eviden and JCDecaux. I joined at its creation to build its Mobility vertical. But every value proposition, in mobility, energy or connectivity, first has to convince the leaders of seven groups, and slide decks are not enough.</span></p></div>
+        <div class="row"><span class="lb"><span data-l="fr">Décision</span><span data-l="en">Decision</span></span><p><span data-l="fr">Créer et diriger un pôle de prototypage, deux data scientists et deux développeurs, au service de toutes les activités du consortium.</span><span data-l="en">Create and lead a prototyping unit, two data scientists and two developers, serving every activity of the consortium.</span></p></div>
+        <div class="row"><span class="lb"><span data-l="fr">Résultat</span><span data-l="en">Outcome</span></span><p><span data-l="fr">Des prototypes qui rendent la valeur tangible. Pour la Mobilité, des services data conçus puis vendus à des collectivités : business plans, prospection, rendez-vous avec les décideurs publics, appels d'offres, premiers clients.</span><span data-l="en">Prototypes that make value tangible. For Mobility, data services designed and then sold to local authorities: business plans, prospecting, meetings with public decision-makers, tenders, first customers.</span></p></div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div><p class="when">2020 – 2021</p><span class="org"><span data-l="fr">Renault, Direction Services Marketing &amp; Data</span><span data-l="en">Renault, Marketing Services &amp; Data</span></span></div>
+      <div>
+        <h3><span data-l="fr">Savoir enfin quel euro digital fait vendre</span><span data-l="en">Knowing which digital euro actually sells</span></h3>
+        <div class="row"><span class="lb"><span data-l="fr">Situation</span><span data-l="en">Situation</span></span><p><span data-l="fr">Vingt filiales et trois marques investissent en média digital. La mesure est confiée aux agences, et chaque canal revendique la même vente : impossible de savoir où investir.</span><span data-l="en">Twenty subsidiaries and three brands invest in digital media. Measurement sits with the agencies, and every channel claims the same sale: no way to know where to invest.</span></p></div>
+        <div class="row"><span class="lb"><span data-l="fr">Décision</span><span data-l="en">Decision</span></span><p><span data-l="fr">Construire un outil qui suit toute la chaîne, de l'euro investi au véhicule vendu : investissement, tracking, trafic, conversion, qualification des leads, vente.</span><span data-l="en">Build a tool that follows the whole chain, from euro invested to vehicle sold: spend, tracking, traffic, conversion, lead qualification, sale.</span></p></div>
+        <div class="row"><span class="lb"><span data-l="fr">Résultat</span><span data-l="en">Outcome</span></span><p><span data-l="fr">L'outil est déployé dans les vingt filiales et pour les trois marques. La contribution de chaque canal à la vente devient lisible.</span><span data-l="en">The tool is deployed across the twenty subsidiaries and three brands. Each channel's contribution to sales becomes visible.</span></p></div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div><p class="when">2014 – 2016</p><span class="org"><span data-l="fr">Renault Retail Group, réseau de distribution du groupe</span><span data-l="en">Renault Retail Group, the group's distribution network</span></span></div>
+      <div>
+        <h3><span data-l="fr">Transformer chaque contact en rendez-vous</span><span data-l="en">Turning every contact into an appointment</span></h3>
+        <div class="row"><span class="lb"><span data-l="fr">Situation</span><span data-l="en">Situation</span></span><p><span data-l="fr">Après cinq ans de marketing produit pour vingt filiales, je rejoins le terrain : le réseau de distribution du groupe. En vente, en occasion comme en après-vente, chaque contact client doit devenir un rendez-vous en concession.</span><span data-l="en">After five years of product marketing for twenty subsidiaries, I moved to the front line: the group's own distribution network. In new sales, used cars and after-sales alike, every customer contact had to become a dealership appointment.</span></p></div>
+        <div class="row"><span class="lb"><span data-l="fr">Décision</span><span data-l="en">Decision</span></span><p><span data-l="fr">Industrialiser la relation client : CRM, génération, qualification et routage des leads, et une plateforme de télémarketing de 33 personnes, des scripts à la formation.</span><span data-l="en">Industrialise customer relationships: CRM, lead generation, qualification and routing, and a 33-person telemarketing platform, from scripts to training.</span></p></div>
+        <div class="row"><span class="lb"><span data-l="fr">Résultat</span><span data-l="en">Outcome</span></span><p><span data-l="fr">Un plan de reconquête qui génère 13 000 rendez-vous et 1,6 M€ de chiffre d'affaires pour 1 M€ investi. La plateforme devient un centre d'excellence que des délégations étrangères viennent observer.</span><span data-l="en">A win-back plan generating 13,000 appointments and €1.6M in revenue for €1M invested. The platform became a centre of excellence visited by foreign delegations.</span></p></div>
+      </div>
+    </article>
+
+    <article class="case">
+      <div><p class="when">2009 – 2014</p><span class="org"><span data-l="fr">Renault, gamme utilitaires</span><span data-l="en">Renault, light commercial vehicles</span></span></div>
+      <div>
+        <h3><span data-l="fr">Vendre l'électrique avant que le marché ne le comprenne</span><span data-l="en">Selling electric before the market understood it</span></h3>
+        <div class="row"><span class="lb"><span data-l="fr">Situation</span><span data-l="en">Situation</span></span><p><span data-l="fr">Je prépare le lancement du premier véhicule électrique de la gamme. Recharge, autonomie, coût d'usage : ces notions ne parlent encore ni aux particuliers, ni aux artisans, ni aux PME, ni aux gestionnaires de grandes flottes.</span><span data-l="en">I prepared the launch of the range's first electric vehicle. Charging, range, cost of use: none of it yet meant anything to private buyers, tradespeople, SMEs or large fleet managers.</span></p></div>
+        <div class="row"><span class="lb"><span data-l="fr">Décision</span><span data-l="en">Decision</span></span><p><span data-l="fr">Rendre l'innovation compréhensible avant de chercher à la rendre désirable, pour chacune de ces clientèles.</span><span data-l="en">Make the innovation understandable before trying to make it desirable, for each of these customer groups.</span></p></div>
+        <div class="row"><span class="lb"><span data-l="fr">Résultat</span><span data-l="en">Outcome</span></span><p><span data-l="fr">Un lancement mené dans le cadre de trois nouveaux modèles déployés dans vingt filiales, de l'offre et du prix jusqu'à la formation du réseau.</span><span data-l="en">A launch carried out as part of three new models rolled out across twenty subsidiaries, from offer and pricing to network training.</span></p></div>
+      </div>
+    </article>
+  </div>
+</section>
+
+<!-- ===== Méthode : principes de travail + conditions de réussite ===== -->
+<section id="methode">
+  <div class="wrap">
+    <p class="label"><span data-l="fr">Méthode</span><span data-l="en">Approach</span></p>
+    <h2><span data-l="fr">Comment je travaille.</span><span data-l="en">How I work.</span></h2>
+    <div class="principles">
+      <div class="pr"><h3><span data-l="fr">Comprendre l'ensemble avant d'agir.</span><span data-l="en">Understand the whole before acting.</span></h3><p><span data-l="fr">Une décision vaut ce que vaut la lecture de la situation.</span><span data-l="en">A decision is only as good as the reading of the situation.</span></p></div>
+      <div class="pr"><h3><span data-l="fr">Installer la méthode tôt.</span><span data-l="en">Put method in place early.</span></h3><p><span data-l="fr">Quelques règles simples au départ évitent beaucoup d'arbitrages tardifs.</span><span data-l="en">A few simple rules at the start prevent many late trade-offs.</span></p></div>
+      <div class="pr"><h3><span data-l="fr">Prendre ce qui n'est pas encore cadré.</span><span data-l="en">Take on what is not yet framed.</span></h3><p><span data-l="fr">C'est là que la valeur se crée, et que la responsabilité compte le plus.</span><span data-l="en">That is where value is created, and where ownership matters most.</span></p></div>
+      <div class="pr"><h3><span data-l="fr">Faire ce que l'on dit, à commencer par soi.</span><span data-l="en">Do what you say, starting with yourself.</span></h3><p><span data-l="fr">L'exigence se montre d'abord par l'exemple. On balaie un escalier par le haut.</span><span data-l="en">Standards are first shown by example. You sweep a staircase from the top.</span></p></div>
+      <div class="pr"><h3><span data-l="fr">Tenir ensemble l'humain et le business.</span><span data-l="en">Hold people and business together.</span></h3><p><span data-l="fr">Un résultat obtenu contre l'équipe ne se répète pas.</span><span data-l="en">A result achieved against the team cannot be repeated.</span></p></div>
+      <div class="pr"><h3><span data-l="fr">Préférer le signal juste au bruit.</span><span data-l="en">Prefer the right signal to noise.</span></h3><p><span data-l="fr">Peu de mots, des faits, une recommandation.</span><span data-l="en">Few words, facts, a recommendation.</span></p></div>
+    </div>
+    <div class="needs">
+      <p><span data-l="fr">Je donne le meilleur avec de vraies responsabilités, une place dans la décision, de l'autonomie dans la manière d'atteindre les objectifs, des problèmes complexes à résoudre et des projets nouveaux qui obligent à apprendre.</span><span data-l="en">I do my best work with real responsibility, a seat at the decision table, autonomy in how objectives are reached, complex problems to solve and new projects that force me to learn.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Citations anonymes issues de l'évaluation 360° (2024) ===== -->
+<section>
+  <div class="wrap">
+    <p class="label"><span data-l="fr">Regards croisés</span><span data-l="en">In others' words</span></p>
+    <h2><span data-l="fr">Ce qu'en disent ceux qui ont travaillé avec moi.</span><span data-l="en">What colleagues say.</span></h2>
+    <div class="quotes">
+      <blockquote><span data-l="fr">« Il cherche constamment à délivrer au-delà des enjeux initiaux du projet. »</span><span data-l="en">“He constantly aims at delivering beyond the initial stakes of the project.”</span></blockquote>
+      <blockquote><span data-l="fr">« Transparent, clair et efficace. Quelqu'un de confiance. »</span><span data-l="en">“Transparent, clear and effective. Someone you can trust.”</span></blockquote>
+      <blockquote><span data-l="fr">« Rigueur et intégrité. »</span><span data-l="en">“Rigour and integrity.”</span></blockquote>
+    </div>
+    <p class="src"><span data-l="fr">Extraits anonymes d'une évaluation 360° conduite par un cabinet indépendant, 2024.</span><span data-l="en">Anonymous excerpts from a 360° assessment run by an independent firm, 2024.</span></p>
+    <div class="trait">
+      <p class="label" style="margin:0"><span data-l="fr">Ce que j'assume</span><span data-l="en">What I own</span></p>
+      <p><span data-l="fr">Le goût du détail, au service du mouvement. J'avance vite, et je descends dans le détail là où il fait la différence : c'est souvent là qu'une stratégie se gagne ou se perd.</span><span data-l="en">An eye for detail, in service of momentum. I move fast, and go into detail where it makes the difference: that is often where a strategy is won or lost.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Projet personnel en cours ===== -->
+<section>
+  <div class="wrap project">
+    <div>
+      <p class="label"><span data-l="fr">En cours</span><span data-l="en">In progress</span></p>
+      <h2 style="margin-bottom:0"><span data-l="fr">Apprendre en construisant.</span><span data-l="en">Learning by building.</span></h2>
+    </div>
+    <div>
+      <span class="tag"><span data-l="fr">Projet personnel</span><span data-l="en">Personal project</span></span>
+      <h3>Relational Intelligence</h3>
+      <p><span data-l="fr">Une application Android d'aide à la relation, que je conçois et développe avec Claude Code. Une façon concrète de comprendre ce que l'IA change dans la conception d'un produit, de la spécification au code.</span><span data-l="en">An Android app supporting relationships, which I am designing and building with Claude Code. A hands-on way to understand what AI changes in product design, from specification to code.</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Parcours : une ligne par poste (dates | intitulé + employeur | périmètre) ===== -->
+<section id="parcours">
+  <div class="wrap">
+    <p class="label"><span data-l="fr">Parcours</span><span data-l="en">Career</span></p>
+    <h2><span data-l="fr">Dix-sept ans, un même fil.</span><span data-l="en">Seventeen years, one thread.</span></h2>
+    <ul class="path">
+      <li><span class="y"><span data-l="fr">2026 – auj.</span><span data-l="en">2026 – now</span></span><span class="r"><span data-l="fr">Business Owner Expérience Client</span><span data-l="en">Customer Experience Business Owner</span><small>Renault, Dacia, Alpine</small></span><span class="s"><span data-l="fr">Parcours digital de la commande à la livraison, trois marques, périmètre mondial</span><span data-l="en">Digital order-to-delivery journey, three brands, worldwide</span></span></li>
+      <li><span class="y">2025</span><span class="r"><span data-l="fr">Product Owner Mobilité &amp; Data</span><span data-l="en">Product Owner, Mobility &amp; Data</span><small>HexaDone</small></span><span class="s"><span data-l="fr">Start-up de la donnée publique, créée par Orange Business et la Banque des Territoires</span><span data-l="en">Public-data start-up founded by Orange Business and Banque des Territoires</span></span></li>
+      <li><span class="y">2021 – 2025</span><span class="r"><span data-l="fr">Program Manager Mobilité &amp; chef du pôle prototypage</span><span data-l="en">Mobility Program Manager &amp; Head of Prototyping</span><small>Software République</small></span><span class="s"><span data-l="fr">Consortium d'innovation de sept grands groupes</span><span data-l="en">Innovation consortium of seven major groups</span></span></li>
+      <li><span class="y">2020 – 2021</span><span class="r">Product Owner Marketing Campaign Intelligence<small>Renault</small></span><span class="s"><span data-l="fr">Mesure de la performance digitale, vingt filiales, trois marques</span><span data-l="en">Digital performance measurement, twenty subsidiaries, three brands</span></span></li>
+      <li><span class="y">2016 – 2020</span><span class="r"><span data-l="fr">Responsable Digital, CRM &amp; E-commerce</span><span data-l="en">Head of Digital, CRM &amp; E-commerce</span><small>Renault</small></span><span class="s"><span data-l="fr">Région Eurasie : Russie, Turquie, Roumanie, Ukraine, Bulgarie</span><span data-l="en">Eurasia region: Russia, Turkey, Romania, Ukraine, Bulgaria</span></span></li>
+      <li><span class="y">2014 – 2016</span><span class="r"><span data-l="fr">Adjoint Responsable Marketing</span><span data-l="en">Deputy Marketing Manager</span><small>Renault Retail Group</small></span><span class="s"><span data-l="fr">Réseau de distribution, CRM, plateforme de télémarketing de 33 personnes</span><span data-l="en">Distribution network, CRM, 33-person telemarketing platform</span></span></li>
+      <li><span class="y">2009 – 2014</span><span class="r"><span data-l="fr">Chef de produit marketing</span><span data-l="en">Marketing Product Manager</span><small>Renault</small></span><span class="s"><span data-l="fr">Lancements de nouveaux modèles dans vingt filiales</span><span data-l="en">New model launches across twenty subsidiaries</span></span></li>
+    </ul>
+    <p class="edu"><span data-l="fr">HEC, Data for Managers (2023) · ESCP, Transformation digitale (2019) · ESC Pau, Master Marketing stratégique (2010) · Heriot-Watt University, Bachelor of Management (2008). Français, anglais courant. Course à pied, golf.</span><span data-l="en">HEC, Data for Managers (2023) · ESCP, Digital Transformation (2019) · ESC Pau, Master's in Strategic Marketing (2010) · Heriot-Watt University, Bachelor of Management (2008). French, fluent English. Running, golf.</span></p>
+  </div>
+</section>
+
+<!-- ===== Contact : volontairement limité à l'e-mail et LinkedIn (discrétion) ===== -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <p class="label">Contact</p>
+    <h2><span data-l="fr">Échangeons.</span><span data-l="en">Let's talk.</span></h2>
+    <a class="mail" href="mailto:adrien.boeuf@gmail.com">adrien.boeuf@gmail.com</a>
+    <p class="alt"><a href="https://www.linkedin.com/in/adrien-boeuf-b807b71a">LinkedIn</a> · Paris</p>
+  </div>
+</section>
+
+<footer><div class="wrap">© 2026 Adrien Boeuf</div></footer>
+
+<script>
+/* -----------------------------------------------------------------
+   Sélecteur de langue.
+   - set(l) : applique la langue l ("fr" ou "en") à la balise <html>,
+     met à jour les boutons et le titre de l'onglet, mémorise le choix.
+   - Au chargement : langue mémorisée, sinon langue du navigateur.
+   - localStorage est entouré de try/catch : certains navigateurs le
+     bloquent (navigation privée) sans que le site doive planter.
+   ----------------------------------------------------------------- */
+(function(){
+  var root=document.documentElement, btns=document.querySelectorAll('.lang button');
+  function set(l){
+    root.lang=l;
+    btns.forEach(function(b){b.setAttribute('aria-pressed', b.dataset.set===l ? 'true':'false');});
+    document.title = l==='en' ? 'Adrien Boeuf · Marketing & Customer Experience' : 'Adrien Boeuf · Marketing & Expérience client';
+    try{localStorage.setItem('lang',l);}catch(e){}
+  }
+  btns.forEach(function(b){b.addEventListener('click',function(){set(b.dataset.set);});});
+  var saved=null; try{saved=localStorage.getItem('lang');}catch(e){}
+  set(saved || ((navigator.language||'fr').slice(0,2)==='fr' ? 'fr' : 'en'));
+})();
+</script>
+</body>
+</html>
